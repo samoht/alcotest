@@ -1,4 +1,4 @@
-.PHONY: all test clean
+.PHONY: all test test-js clean format
 
 all:
 	dune build

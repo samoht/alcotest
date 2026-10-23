@@ -28,6 +28,14 @@ dune build @runtest-js  # Run the test-suite on nodejs (using js_of_ocaml)
 dune clean              # Delete all artefacts
 ```
 
+Before opening a pull request:
+
+- format the sources with `make format`. CI checks the formatting with the
+  ocamlformat version pinned in `.ocamlformat` (0.26.2, which needs
+  OCaml < 5.3);
+- add an entry to `CHANGES.md`, under `### unreleased`. CI fails otherwise,
+  unless a maintainer labels the pull request `no-changelog-needed`.
+
 ## Project structure
 
 The high-level project structure is as follows:
