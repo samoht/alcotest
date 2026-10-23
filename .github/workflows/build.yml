@@ -18,30 +18,25 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
+  test:
+    name: test (${{ matrix.os }}, ${{ matrix.ocaml-compiler }})
     strategy:
       fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-        packages:
-          - "."
-        runtest:
-          - true
-        ocaml-compiler:
-          - "5.x"
-          - "4.14"
         include:
+          - os: ubuntu-latest
+            ocaml-compiler: "5"
           - os: macos-latest
-            ocaml-compiler: "4.14"
-            packages: "."
-            runtest: true
-
+            ocaml-compiler: "5"
           - os: windows-latest
+            ocaml-compiler: "5"
+            # alcotest-async depends on core_unix, which does not support
+            # Windows.
+            opam-files: ./alcotest.opam ./alcotest-js.opam ./alcotest-lwt.opam ./alcotest-mirage.opam
+            dune-flags: --only-packages alcotest,alcotest-js,alcotest-lwt,alcotest-mirage
+          # alcotest-async lower bound
+          - os: ubuntu-latest
             ocaml-compiler: "4.14"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -64,12 +59,25 @@ jobs:
         uses: ocaml/setup-ocaml@v3
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
-          opam-local-packages: ${{ matrix.opam-local-packages }}
-          opam-repositories: "${{ matrix.opam-repositories || 'default: https://opam.ocaml.org' }}"
 
-      - run: opam install ${{ matrix.packages }} ${{ matrix.os != 'windows-latest' && '--with-test' || '' }} --deps-only
-      - if: ${{ matrix.runtest }}
-        run: opam exec -- dune build @install @check @runtest @runtest-js
+      # conf-npm checks for npm by running "npm --version", but opam on
+      # Windows only resolves .exe commands and npm is a .cmd shim there.
+      # npm is provided by setup-node above, so register conf-npm without
+      # running its check.
+      - name: Register npm with opam
+        if: runner.os == 'Windows'
+        run: opam install conf-npm --fake
+
+      - run: opam install ${{ matrix.opam-files || '.' }} --deps-only --with-test
+
+      # The aliases are quoted because PowerShell, the default shell on
+      # Windows, reads a bare @name as splatting the variable $name.
+      - run: opam exec -- dune build ${{ matrix.dune-flags }} '@install' '@check' '@runtest'
+
+      # The js_of_ocaml backend does not work on Windows yet: absolute paths
+      # are mangled and caml_unix_filedescr_of_channel is missing.
+      - if: runner.os != 'Windows'
+        run: opam exec -- dune build '@runtest-js'
 
   lower-bound:
     name: build (ubuntu-latest, 4.08)
