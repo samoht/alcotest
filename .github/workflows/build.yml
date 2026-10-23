@@ -43,51 +43,6 @@ jobs:
             opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
             runtest: false
 
-          - os: ubuntu-latest
-            ocaml-compiler: "4.08"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-            opam-repositories: |
-              default: https://opam.ocaml.org
-              archive: https://github.com/ocaml/opam-repository-archive.git
-
-          - os: ubuntu-latest
-            ocaml-compiler: "4.09"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-            opam-repositories: |
-              default: https://opam.ocaml.org
-              archive: https://github.com/ocaml/opam-repository-archive.git
-
-          - os: ubuntu-latest
-            ocaml-compiler: "4.10"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-            opam-repositories: |
-              default: https://opam.ocaml.org
-              archive: https://github.com/ocaml/opam-repository-archive.git
-
-          - os: ubuntu-latest
-            ocaml-compiler: "4.11"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-
-          - os: ubuntu-latest
-            ocaml-compiler: "4.12"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-
-          - os: ubuntu-latest
-            ocaml-compiler: "4.13"
-            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
-            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
-            runtest: false
-
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
 
@@ -115,3 +70,26 @@ jobs:
       - run: opam install ${{ matrix.packages }} ${{ matrix.os != 'windows-latest' && '--with-test' || '' }} --deps-only
       - if: ${{ matrix.runtest }}
         run: opam exec -- dune build @install @check @runtest @runtest-js
+
+  lower-bound:
+    name: build (ubuntu-latest, 4.08)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      # opam-repository dropped compilers older than 4.11.
+      - name: Set-up OCaml 4.08
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "4.08"
+          opam-repositories: |
+            default: https://opam.ocaml.org
+            archive: https://github.com/ocaml/opam-repository-archive.git
+
+      # alcotest-async requires OCaml >= 4.14.
+      - run: opam install ./alcotest.opam ./alcotest-js.opam ./alcotest-lwt.opam ./alcotest-mirage.opam --deps-only
+
+      - run: opam exec -- dune build -p alcotest,alcotest-js,alcotest-lwt,alcotest-mirage @install
