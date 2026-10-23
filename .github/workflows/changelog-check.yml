@@ -2,19 +2,29 @@ name: Changelog check
 
 on:
   pull_request:
-    branches: [ main ]
-    types: [ opened, synchronize, reopened, labeled, unlabeled ]
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-    - uses: actions/checkout@v7
+      # The pull request's merge commit and its first parent, the tip of
+      # the base branch.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
 
-    - name: git diff
-      if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-changelog-needed') }}
-      env:
-        BASE_REF: ${{ github.event.pull_request.base.ref }}
-      run: |
-        ! git diff --exit-code origin/$BASE_REF -- CHANGES.md
+      - name: Check that CHANGES.md is updated
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'no-changelog-needed') }}
+        run: |
+          base=$(git rev-parse --verify HEAD^1)
+          if git diff --quiet "$base" HEAD -- CHANGES.md; then
+            echo "::error file=CHANGES.md::CHANGES.md is unchanged: add an entry, or label the pull request no-changelog-needed."
+            exit 1
+          fi
