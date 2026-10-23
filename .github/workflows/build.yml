@@ -101,3 +101,23 @@ jobs:
       - run: opam install ./alcotest.opam ./alcotest-js.opam ./alcotest-lwt.opam ./alcotest-mirage.opam --deps-only
 
       - run: opam exec -- dune build -p alcotest,alcotest-js,alcotest-lwt,alcotest-mirage @install
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      # ocamlformat 0.26.2, pinned in .ocamlformat, requires OCaml < 5.3.
+      - name: Set-up OCaml 4.14
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "4.14"
+
+      - name: Lint opam files
+        uses: ocaml/setup-ocaml/lint-opam@v3
+
+      - name: Check formatting
+        uses: ocaml/setup-ocaml/lint-fmt@v3
