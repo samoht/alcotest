@@ -11,7 +11,7 @@ homepage: "https://github.com/mirage/alcotest"
 doc: "https://mirage.github.io/alcotest"
 bug-reports: "https://github.com/mirage/alcotest/issues"
 depends: [
-  "dune" {>= "3.0"}
+  "dune" {>= "3.17"}
   "alcotest" {= version}
   "js_of_ocaml-compiler" {>= "3.11.0"}
   "fmt" {with-test & >= "0.8.7"}
