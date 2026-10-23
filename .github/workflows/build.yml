@@ -101,6 +101,6 @@ jobs:
           opam-local-packages: ${{ matrix.opam-local-packages }}
           opam-repositories: "${{ matrix.opam-repositories || 'default: https://opam.ocaml.org' }}"
 
-      - run: opam install ${{ matrix.packages }} --with-test --deps-only
+      - run: opam install ${{ matrix.packages }} ${{ matrix.os != 'windows-latest' && '--with-test' || '' }} --deps-only
       - if: ${{ matrix.runtest }}
         run: opam exec -- dune build @install @check @runtest @runtest-js
