@@ -3,9 +3,19 @@ name: build
 on:
   pull_request:
   push:
+    branches:
+      - main
+  workflow_dispatch:
   schedule:
     # Prime the caches every Monday
     - cron: 0 1 * * MON
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -79,6 +89,7 @@ jobs:
             runtest: false
 
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
 
     steps:
       - name: Set git to use LF
