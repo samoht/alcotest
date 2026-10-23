@@ -4,6 +4,10 @@
   by dune >= 3.22), install OCaml 4.08-4.10 from opam-repository-archive, and
   skip test dependencies on Windows where `conf-npm` cannot be built
   (#445, @samoht)
+- Require dune >= 3.17 (`(lang dune 3.17)`). Run the tests on OCaml 5 on
+  Linux, macOS and Windows, build the OCaml 4.08 lower bound from this tree,
+  lint the opam files and the formatting, and make the changelog check fail
+  when `CHANGES.md` is not updated (#446, @samoht)
 
 ### 1.9.1 (2025-10-01)
 
