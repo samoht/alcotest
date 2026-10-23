@@ -38,18 +38,27 @@ jobs:
             packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
             opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
             runtest: false
+            opam-repositories: |
+              default: https://opam.ocaml.org
+              archive: https://github.com/ocaml/opam-repository-archive.git
 
           - os: ubuntu-latest
             ocaml-compiler: "4.09"
             packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
             opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
             runtest: false
+            opam-repositories: |
+              default: https://opam.ocaml.org
+              archive: https://github.com/ocaml/opam-repository-archive.git
 
           - os: ubuntu-latest
             ocaml-compiler: "4.10"
             packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
             opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
             runtest: false
+            opam-repositories: |
+              default: https://opam.ocaml.org
+              archive: https://github.com/ocaml/opam-repository-archive.git
 
           - os: ubuntu-latest
             ocaml-compiler: "4.11"
@@ -90,6 +99,7 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}
           opam-local-packages: ${{ matrix.opam-local-packages }}
+          opam-repositories: "${{ matrix.opam-repositories || 'default: https://opam.ocaml.org' }}"
 
       - run: opam install ${{ matrix.packages }} --with-test --deps-only
       - if: ${{ matrix.runtest }}
