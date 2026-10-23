@@ -1,3 +1,10 @@
+### unreleased
+
+- Fix CI: add the missing empty `only_monadic_effects-js.expected` (required
+  by dune >= 3.22), install OCaml 4.08-4.10 from opam-repository-archive, and
+  skip test dependencies on Windows where `conf-npm` cannot be built
+  (#445, @samoht)
+
 ### 1.9.1 (2025-10-01)
 
 - Remove bad test with `cmdliner` to be compatible with `cmdliner.2.0.0` (@MisterDA, #424)
