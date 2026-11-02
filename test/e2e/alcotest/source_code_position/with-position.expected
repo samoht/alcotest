@@ -8,7 +8,7 @@ This run has ID `<uuid>'.
 │ [FAIL]        to_test          0   capitalise.                               │
 └──────────────────────────────────────────────────────────────────────────────┘
 ASSERT strings
-File "ocaml-alcotest/test/e2e/alcotest/source_code_position/test_source_code_position.ml", line 24, character 2:
+File "ocaml-alcotest/test/e2e/alcotest/source_code_position/main.ml", line 24, character 2:
 FAIL strings
 
    Expected: `"A"'
@@ -24,7 +24,7 @@ Logs saved to `<build-context>/_build/_tests/<test-dir>/to_test.000.output'.
 │ [FAIL]        to_test          1   double all.                               │
 └──────────────────────────────────────────────────────────────────────────────┘
 ASSERT int lists 1
-File "ocaml-alcotest/test/e2e/alcotest/source_code_position/test_source_code_position.ml", line 28, character 2:
+File "ocaml-alcotest/test/e2e/alcotest/source_code_position/main.ml", line 28, character 2:
 FAIL int lists 1
 
    Expected: `[1]'
@@ -36,8 +36,8 @@ Logs saved to `<build-context>/_build/_tests/<test-dir>/to_test.001.output'.
  ──────────────────────────────────────────────────────────────────────────────
 
 Full test results in `<build-context>/_build/_tests/<test-dir>'.
-2 failures! in <test-duration>s. 2 tests run.Forging ahead regardless!
-
+2 failures! in <test-duration>s. 2 tests run.
+Forging ahead regardless!
 Testing `Second suite'.
 This run has ID `<uuid>'.
 

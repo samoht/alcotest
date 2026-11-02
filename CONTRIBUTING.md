@@ -25,7 +25,7 @@ dune clean              # Delete all artefacts
 The high-level project structure is as follows:
 
 ```sh
-├── src/
+├── lib/
 │   ├── alcotest-engine/
 │   │   ├── core.ml           # The main test runner, parameterised over...
 │   │   ├── monad.ml          # ... a concurrency monad
