@@ -1,4 +1,5 @@
-(lang dune 3.0)
+(lang dune 3.24)
+(using mdx 0.4)
 (implicit_transitive_deps false)
 (generate_opam_files true)
 
@@ -10,6 +11,7 @@
 
 (package
  (name alcotest)
+ (tags (org:blacksun test))
  (synopsis "Alcotest is a lightweight and colourful test framework")
  (documentation "https://mirage.github.io/alcotest")
  (description "\
@@ -27,6 +29,9 @@ tests to run.
   (ocaml (>= 4.08))
   (fmt (>= 0.8.7))
   astring
+  fpath
+  base-unix
+  (mdx :with-test)
   (cmdliner (>= 1.2.0))
   (re (>= 1.7.2))
   stdlib-shims

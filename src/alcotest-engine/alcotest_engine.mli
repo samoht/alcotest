@@ -52,6 +52,7 @@ module Platform = Platform
     They do not provide a stable interface. *)
 module Private : sig
   module Pp = Pp
+  module Run_id = Run_id
 end
 
 module Formatters = Formatters

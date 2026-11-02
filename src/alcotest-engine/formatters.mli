@@ -12,12 +12,31 @@ type stdout = private Format.formatter
 type stderr = private Format.formatter
 
 val set_stdout : stdout -> unit
+(** Set the formatter used for runner standard output. *)
+
 val set_stderr : stderr -> unit
+(** Set the formatter used for runner standard error. *)
+
 val get_stdout : unit -> stdout
+(** Return the currently configured standard-output formatter. *)
+
 val get_stderr : unit -> stderr
+(** Return the currently configured standard-error formatter. *)
+
 val ocaml_stdout : stdout
+(** The process-wide OCaml standard-output formatter. *)
+
 val ocaml_stderr : stderr
+(** The process-wide OCaml standard-error formatter. *)
+
 val make_stdout : unit -> stdout
+(** Create an independent formatter writing to standard output. *)
+
 val make_stderr : unit -> stderr
+(** Create an independent formatter writing to standard error. *)
+
 val pr : ('a, Format.formatter, unit) format -> 'a
+(** Format a message on the currently configured standard-output formatter. *)
+
 val epr : ('a, Format.formatter, unit) format -> 'a
+(** Format a message on the currently configured standard-error formatter. *)

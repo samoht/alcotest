@@ -1,3 +1,5 @@
+(** Terminal rendering of test events and summaries. *)
+
 (*
  * Copyright (c) 2013-2016 Thomas Gazagnaire <thomas@gazagnaire.org>
  * Copyright (c) 2019      Craig Ferguson    <craig@tarides.com>

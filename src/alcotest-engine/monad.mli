@@ -1,3 +1,5 @@
+(** Sequencing and exception handling supplied by a test runner. *)
+
 (*
  * Copyright (c) 2019 Craig Ferguson <craig@tarides.com>
  *

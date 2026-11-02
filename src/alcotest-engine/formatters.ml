@@ -11,5 +11,5 @@ let ocaml_stdout = Format.std_formatter
 let ocaml_stderr = Format.err_formatter
 let make_stdout () = Format.formatter_of_out_channel Stdlib.stdout
 let make_stderr () = Format.formatter_of_out_channel Stdlib.stderr
-let pr fmt = Format.fprintf !stdout fmt
-let epr fmt = Format.fprintf !stderr fmt
+let pr fmt = Fmt.pf !stdout fmt
+let epr fmt = Fmt.pf !stderr fmt

@@ -55,4 +55,4 @@ Logs saved to `<build-context>/_build/_tests/<test-dir>/U+03A9U+00E8one.001.outp
 
 Full test results in `<build-context>/_build/_tests/<test-dir>'.
 1 failure! in <test-duration>s. 3 tests run.
-Fatal error: exception Alcotest_engine__Core.Make(P)(M).Test_error
+Fatal error: exception Alcotest_engine__Core.Make_with_log_trap(P)(M).Test_error

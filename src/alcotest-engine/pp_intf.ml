@@ -85,12 +85,12 @@ module type Pp = sig
   val tag : [ `Ok | `Fail | `Skip | `Todo | `Assert ] Fmt.t
   val map_theta : theta -> f:(unit Fmt.t -> unit Fmt.t) -> theta
 
-  val pp_plural : int Fmt.t
+  val plural : int Fmt.t
   (** This is for adding an 's' to words that should be pluralized, e.g.
 
       {[
       let n = List.length items in
-      Fmt.pr "Found %i item%a." n pp_plural n
+      Fmt.pr "Found %i item%a." n plural n
       ]} *)
 
   module Make (_ : Make_arg) : S

@@ -49,12 +49,12 @@ module type Config = sig
     (** The type of configurations supplied by the user, with defaults not yet
         supplied. *)
 
-    val create : (unit -> t) with_options
+    val v : (unit -> t) with_options
     (** Build a config object with the supplied options. *)
 
     val kcreate : (t -> 'a) -> 'a with_options
-    (** Like [create], but passes the constructed config to a continuation
-        rather than returning directly. *)
+    (** Like {!v}, but passes the constructed config to a continuation rather
+        than returning directly. *)
 
     val term :
       stdout:Formatters.stdout ->

@@ -1,3 +1,13 @@
+### Unreleased
+
+- Bound registered Unix logs by the latest run and latest completed failure
+  per suite, preserving live runs through kernel leases. Leave unmarked legacy
+  logs outside automatic retirement.
+- Add complete-run log ownership constructors while preserving the V1 runner
+  and preparation-only platform contracts.
+- Report physical execution paths so concurrent suite aliases cannot redirect
+  a running test's diagnostics.
+
 ### 1.9.1 (2025-10-01)
 
 - Remove bad test with `cmdliner` to be compatible with `cmdliner.2.0.0` (@MisterDA, #424)

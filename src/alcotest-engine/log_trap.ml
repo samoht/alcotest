@@ -5,17 +5,11 @@ include Log_trap_intf
 
 module Make
     (Promise : Monad.EXTENDED)
-    (Platform : Platform.S with type 'a promise := 'a Promise.t) =
+    (Platform : Platform.S_with_log_trap with type 'a promise := 'a Promise.t) =
 struct
   open Promise.Syntax
 
-  type state = {
-    root : string;
-    uuid : string;
-    suite_name : string;
-    has_alias : bool;
-  }
-
+  type state = { mutable root : string; uuid : string; suite_name : string }
   type t = Inactive | Active of state
 
   (** Take a string path and collapse a leading [$HOME] path segment to [~]. *)
@@ -33,12 +27,7 @@ struct
             "~" ^ tail)
 
   let inactive = Inactive
-
-  let active ~root ~uuid ~suite_name =
-    Platform.prepare_log_trap ~root ~uuid ~name:suite_name;
-    let has_alias = Platform.file_exists (Filename.concat root suite_name) in
-    Active { root; uuid; suite_name; has_alias }
-
+  let active ~root ~uuid ~suite_name = Active { root; uuid; suite_name }
   let pp_path = Fmt.using maybe_collapse_home Fmt.string
 
   let iter_lines fpath ~f =
@@ -64,18 +53,25 @@ struct
         let display_lines =
           if omitted_count = 0 then selected_lines
           else
-            Fmt.str "... (omitting %i line%a)" omitted_count Pp.pp_plural
+            Fmt.str "... (omitting %i line%a)" omitted_count Pp.plural
               omitted_count
             :: selected_lines
         in
         ListLabels.iter display_lines ~f:(Fmt.pf ppf "%s@\n")
 
-  let log_dir ~via_symlink { suite_name; uuid; root; has_alias } =
-    let via_symlink = via_symlink && has_alias in
-    Filename.concat root (if via_symlink then suite_name else uuid)
+  let log_dir { uuid; root; _ } = Filename.concat root uuid
+  let output_fpath t tname = Filename.concat (log_dir t) (Test_name.file tname)
 
-  let output_fpath ~via_symlink t tname =
-    Filename.concat (log_dir ~via_symlink t) (Test_name.file tname)
+  let with_run t f =
+    match t with
+    | Inactive -> f ()
+    | Active state ->
+        if Filename.is_relative state.root then
+          state.root <- Filename.concat (Platform.getcwd ()) state.root;
+        Platform.with_log_trap ~root:state.root ~uuid:state.uuid
+          ~name:state.suite_name (fun () ->
+            let+ failures = f () in
+            (failures, failures > 0))
 
   let active_or_exn = function
     | Active t -> t
@@ -83,18 +79,18 @@ struct
 
   let pp_current_run_dir t ppf =
     let t = active_or_exn t in
-    pp_path ppf (log_dir ~via_symlink:true t)
+    pp_path ppf (log_dir t)
 
   let pp_log_location t tname ppf =
     let t = active_or_exn t in
-    let path = output_fpath ~via_symlink:true t tname in
+    let path = output_fpath t tname in
     pp_path ppf path
 
   let recover_logs t ~tail tname =
     match t with
     | Inactive -> None
     | Active t -> (
-        let fpath = output_fpath ~via_symlink:false t tname in
+        let fpath = output_fpath t tname in
         match Platform.file_exists fpath with
         | false -> None
         | true -> Some (fun ppf -> pp_tail tail fpath ppf))
@@ -102,12 +98,19 @@ struct
   let with_captured_logs t tname f x =
     match t with
     | Inactive -> f x
-    | Active t ->
-        let fd =
-          Platform.open_write_only (output_fpath ~via_symlink:false t tname)
-        in
+    | Active t -> (
         let* () = Promise.return () in
-        let+ a = Platform.with_redirect fd (fun () -> f x) in
+        let fd = Platform.open_write_only (output_fpath t tname) in
+        let* outcome =
+          Promise.catch
+            (fun () ->
+              let+ a = Platform.with_redirect fd (fun () -> f x) in
+              Ok a)
+            (fun exn ->
+              Promise.return (Error (exn, Printexc.get_raw_backtrace ())))
+        in
         Platform.close fd;
-        a
+        match outcome with
+        | Ok a -> Promise.return a
+        | Error (exn, backtrace) -> Printexc.raise_with_backtrace exn backtrace)
 end

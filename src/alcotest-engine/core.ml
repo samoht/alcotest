@@ -40,7 +40,8 @@ let () =
     | Check_error err -> Some (Lazy.force print_error err)
     | _ -> None)
 
-module Make (P : Platform.MAKER) (M : Monad.S) = struct
+module Make_with_log_trap (P : Platform.MAKER_WITH_LOG_TRAP) (M : Monad.S) =
+struct
   module P = P (M)
 
   module Pp = struct
@@ -82,15 +83,7 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
     stderr : Formatters.stderr;
   }
 
-  let gen_run_id =
-    let random_state = lazy (Random.State.make_self_init ()) in
-    let random_hex _ =
-      let state = Lazy.force random_state in
-      match Random.State.int state 36 with
-      | n when n < 10 -> Char.chr (n + Char.code '0')
-      | n -> Char.chr (n - 10 + Char.code 'A')
-    in
-    fun () -> String.v ~len:8 random_hex
+  let gen_run_id () = Run_id.to_string (Run_id.v ())
 
   let empty ~config ~trap_logs ~suite_name:unescaped_name =
     let errors = [] in
@@ -272,7 +265,7 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
         | n when n > 0 ->
             Formatters.pr "@\n  %a@\n"
               Fmt.(styled `Faint string)
-              (Fmt.str "... with %d subsequent test%a skipped." n Pp.pp_plural n)
+              (Fmt.str "... with %d subsequent test%a skipped." n Pp.plural n)
         | 0 -> ()
         | _ -> assert false
     in
@@ -386,7 +379,7 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
     (* TODO: refactor [register_all] to not require dummy state *)
     let config =
       Config.apply_defaults ~default_log_dir:"<not-shown-to-user>"
-        (Config.User.create ())
+        (Config.User.v ())
     in
     let t =
       register_all
@@ -420,9 +413,10 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
         (styled `Faint (fun ppf () ->
              pf ppf "This run has ID %a.@,@," (Pp.quoted string) t.run_id))
         ();
-      let r = run_tests t () args in
-      if config#ci = `Github_actions then Formatters.pr "::endgroup::\n";
-      r
+      Log_trap.with_run t.log_trap (fun () ->
+          let+ failures = run_tests t () args in
+          if config#ci = `Github_actions then Formatters.pr "::endgroup::\n";
+          failures)
     in
     at_exit
       (Format.pp_print_flush (Formatters.get_stderr () :> Format.formatter));
@@ -446,9 +440,13 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
   let run = Config.User.kcreate run'
 end
 
+module Make (P : Platform.MAKER) (M : Monad.S) =
+  Make_with_log_trap (Platform.Legacy (P)) (M)
+
 module V1 = struct
   include V1_types
   module Make = Make
+  module Make_with_log_trap = Make_with_log_trap
 
   exception Skip = Skip
 end

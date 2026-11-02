@@ -18,3 +18,9 @@
  (action
   (run %{exe:retention.exe} %{exe:runner.exe})))
 
+(test
+ (enabled_if
+  (= %{os_type} Unix))
+ (name lifecycle)
+ (modules lifecycle)
+ (libraries alcotest_log_tests alcotest alcotest.engine fmt unix))

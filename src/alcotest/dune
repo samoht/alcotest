@@ -1,6 +1,7 @@
 (library
  (public_name alcotest)
- (libraries alcotest.engine astring fmt fmt.tty unix)
+ (private_modules log_store terminal)
+ (libraries alcotest.engine astring fmt fmt.tty unix fpath)
  (foreign_stubs
   (language c)
   (names alcotest_stubs))

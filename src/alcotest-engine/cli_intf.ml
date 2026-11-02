@@ -63,6 +63,10 @@ module type Cli = sig
     module type S = V1_types.S
     module type MAKER = V1_types.MAKER
 
+    (** CLI runner whose platform owns the complete captured-log lifetime. *)
+    module Make_with_log_trap (_ : Platform.MAKER_WITH_LOG_TRAP) (M : Monad.S) :
+      V1_types.S with type return = unit M.t
+
     module Make (_ : Platform.MAKER) (M : Monad.S) :
       V1_types.S with type return = unit M.t
   end

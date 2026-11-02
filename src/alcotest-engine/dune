@@ -18,6 +18,7 @@
 (library
  (name alcotest_engine)
  (public_name alcotest.engine)
+ (private_modules log_trap model safe_string)
  (libraries
   alcotest.stdlib_ext
   fmt

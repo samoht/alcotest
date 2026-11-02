@@ -9,6 +9,7 @@ module Platform = Platform
 
 module Private = struct
   module Pp = Pp
+  module Run_id = Run_id
 end
 
 module Formatters = Formatters

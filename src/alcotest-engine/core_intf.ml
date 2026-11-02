@@ -116,12 +116,24 @@ module type Core = sig
     module type S = V1_types.S
     module type MAKER = V1_types.MAKER
 
+    (** Runner whose platform owns the complete captured-log lifetime. *)
+    module Make_with_log_trap
+        (_ : Platform.MAKER_WITH_LOG_TRAP)
+        (M : Monad.S) : sig
+      include V1_types.S with type return = unit M.t
+
+      val list_tests : 'a test list -> return
+      val run' : Config.User.t -> string -> unit test list -> return
+
+      val run_with_args' :
+        Config.User.t -> string -> 'a -> 'a test list -> return
+    end
+
     module Make : MAKER
     (** Functor for building a tester that sequences tests of type
         [('a -> unit M.t)] within a given concurrency monad [M.t]. The [run] and
         [run_with_args] functions must be scheduled in a global event loop.
-        Intended for use by the {!Alcotest_lwt} and {!Alcotest_async} backends.
-    *)
+        Existing custom platforms retain their original preparation contract. *)
 
     exception Skip
   end

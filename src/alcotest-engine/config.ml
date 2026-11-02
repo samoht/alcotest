@@ -329,7 +329,7 @@ module User = struct
         stderr;
       }
 
-  let create : (unit -> t) with_options = kcreate (fun t () -> t)
+  let v : (unit -> t) with_options = kcreate (fun t () -> t)
   let and_exit t = Option.value ~default:And_exit.default t.and_exit
 
   let record_backtrace t =

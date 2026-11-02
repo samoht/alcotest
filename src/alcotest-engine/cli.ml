@@ -19,7 +19,7 @@ include Cli_intf
 open! Import
 open Cmdliner
 
-module Make (P : Platform.MAKER) (M : Monad.S) :
+module Make_with_log_trap (P : Platform.MAKER_WITH_LOG_TRAP) (M : Monad.S) :
   V1_types.S with type return = unit M.t = struct
   (**  *)
 
@@ -32,21 +32,21 @@ module Make (P : Platform.MAKER) (M : Monad.S) :
       + 4. if the flag/option is passed to [run] directly, use that;
       + 5. otherwise, use the default behaviour set by {!Alcotest.Core}. *)
 
-  module C = Core.V1.Make (P) (M)
+  module C = Core.V1.Make_with_log_trap (P) (M)
   include C
   module P = P (M)
   open Cmdliner_syntax
 
   let ci_env =
     let doc =
-      Printf.sprintf "Whether Alcotest is running in a CI system, if set to %s."
+      Fmt.str "Whether Alcotest is running in a CI system, if set to %s."
         (Arg.doc_quote "true")
     in
     Cmdliner.Cmd.Env.info "CI" ~doc
 
   let github_actions_env =
     let doc =
-      Printf.sprintf
+      Fmt.str
         "Whether Alcotest is running in GitHub Actions, if set to %s. Display \
          tests errors and outputs GitHub Actions annotations."
         (Arg.doc_quote "true")
@@ -182,7 +182,11 @@ module Make (P : Platform.MAKER) (M : Monad.S) :
         run_with_args' config ~argv name (Term.const ()) tl)
 end
 
+module Make (P : Platform.MAKER) (M : Monad.S) =
+  Make_with_log_trap (Platform.Legacy (P)) (M)
+
 module V1 = struct
   include V1_types
   module Make = Make
+  module Make_with_log_trap = Make_with_log_trap
 end

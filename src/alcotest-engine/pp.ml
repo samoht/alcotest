@@ -21,7 +21,7 @@ open! Import
 open Model
 
 let map_theta t ~f ppf = f (fun ppf () -> t ppf) ppf ()
-let pp_plural ppf x = Fmt.pf ppf (if x < 2 then "" else "s")
+let plural ppf x = Fmt.pf ppf (if x < 2 then "" else "s")
 
 let colour_of_tag = function
   | `Ok -> `Green
@@ -35,13 +35,13 @@ let string_of_tag = function
   | `Todo -> "TODO"
   | `Assert -> "ASSERT"
 
-let pp_tag ~wrapped ppf typ =
+let render_tag ~wrapped ppf typ =
   let colour = colour_of_tag typ in
   let tag = string_of_tag typ in
   let tag = if wrapped then "[" ^ tag ^ "]" else tag in
   Fmt.(styled colour string) ppf tag
 
-let tag = pp_tag ~wrapped:false
+let tag = render_tag ~wrapped:false
 
 module Make (P : sig
   val stdout_columns : unit -> int option
@@ -108,7 +108,7 @@ struct
 
   let pp_result ppf result =
     let tag = tag_of_result result in
-    left left_tag (pp_tag ~wrapped:true) ppf tag
+    left left_tag (render_tag ~wrapped:true) ppf tag
 
   let pp_result_compact ppf result =
     let colour = result |> tag_of_result |> colour_of_tag in
@@ -210,10 +210,10 @@ struct
   let pp_summary ppf r =
     let pp_failures ppf = function
       | 0 -> green_s ppf "Test Successful"
-      | n -> red ppf "%d failure%a!" n pp_plural n
+      | n -> red ppf "%d failure%a!" n plural n
     in
     Fmt.pf ppf "%a in %.3fs. %d test%a run.@," pp_failures r.failures r.time
-      r.success pp_plural r.success
+      r.success plural r.success
 
   let suite_results ~log_dir config ppf r =
     let print_summary = (not config#compact) || r.failures > 0 in

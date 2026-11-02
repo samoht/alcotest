@@ -2,25 +2,7 @@ open! Import
 
 type speed_level = [ `Quick | `Slow ]
 
-module Test_name : sig
-  type t
-
-  val v : name:string -> index:int -> t
-  val name : t -> Safe_string.t
-  val index : t -> int
-
-  val pp : t Fmt.t
-  (** Pretty-print the unescaped test-case name *)
-
-  val file : t -> string
-  (** An escaped form of the test name with [.output] suffix. *)
-
-  val length : t -> int
-  (** The approximate number of terminal columns consumed by [pp_name]. *)
-
-  val compare : t -> t -> int
-  (** Order lexicographically by name, then by index. *)
-end = struct
+module Test_name = struct
   type t = { name : Safe_string.t; file : string; index : int }
 
   let index { index; _ } = index
@@ -60,34 +42,7 @@ module Run_result = struct
     | `Error _ | `Exn _ | `Todo _ -> true
 end
 
-module Suite (M : Monad.S) : sig
-  type 'a t
-  type 'a test_fn = [ `Skip | `Run of 'a -> Run_result.t M.t ]
-
-  type 'a test_case = {
-    name : Test_name.t;
-    speed_level : speed_level;
-    fn : 'a test_fn;
-  }
-
-  val v : name:string -> (_ t, [> `Empty_name ]) result
-  (** Construct a new suite, given a non-empty [name]. Test cases must be added
-      with {!add}. *)
-
-  val name : _ t -> string
-  (** An escaped form of the suite name. *)
-
-  val pp_name : _ t Fmt.t
-  (** Pretty-print the unescaped suite name. *)
-
-  val add :
-    'a t ->
-    Test_name.t * string * speed_level * 'a test_fn ->
-    ('a t, [ `Duplicate_test_path of string ]) result
-
-  val tests : 'a t -> 'a test_case list
-  val doc_of_test_name : 'a t -> Test_name.t -> string
-end = struct
+module Suite (M : Monad.S) = struct
   module String_set = Set.Make (String)
 
   type 'a test_fn = [ `Skip | `Run of 'a -> Run_result.t M.t ]

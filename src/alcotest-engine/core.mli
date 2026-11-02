@@ -1,3 +1,5 @@
+(** Monadic test execution without command-line parsing. *)
+
 (*
  * Copyright (c) 2021 Craig Ferguson <craig@tarides.com>
  *

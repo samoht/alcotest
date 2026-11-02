@@ -42,7 +42,8 @@ val pp : 'a testable -> 'a Fmt.t
 (** [pp t] is [t]'s pretty-printer. *)
 
 val equal : 'a testable -> 'a -> 'a -> bool
-(** [equal t] is [t]'s equality. *)
+(** [equal t expected actual] tests whether [expected] and [actual] are equal.
+*)
 
 val bool : bool testable
 (** [bool] tests booleans. *)
@@ -99,7 +100,7 @@ val triple :
 
 val of_pp : 'a Fmt.t -> 'a testable
 (** [of_pp pp] tests values which can be printed using [pp] and compared using
-    {!Stdlib.compare} *)
+    {!Stdlib.compare}. *)
 
 val pass : 'a testable
 (** [pass] tests values of any type and always succeeds. *)

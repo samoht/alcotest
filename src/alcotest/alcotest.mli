@@ -49,4 +49,4 @@ end
     API, parameterised over the thread implementation and the platform. This
     package provides the [Unix] platform implementation. *)
 
-module Unix_platform : Alcotest_engine.Platform.MAKER
+module Unix_platform : Alcotest_engine.Platform.MAKER_WITH_LOG_TRAP

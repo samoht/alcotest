@@ -166,7 +166,7 @@ let show_assert = function
   | msg ->
       Fmt.(flush (Formatters.get_stdout () :> Format.formatter))
         () (* Flush any test stdout preceding the assert *);
-      Format.fprintf
+      Fmt.pf
         (Formatters.get_stderr () :> Format.formatter)
         "%a %s\n%!" Pp.tag `Assert msg
 

@@ -1,29 +1,23 @@
 open! Import
 open Model
 
-(** Running tests have their output hidden by default to avoid cluttering the
-    Alcotest display with irrelevant output. However, we (usually) want to keep
-    the logs on disk so that we can re-display them if a test fails. Logs are
-    stored with the following structure:
+(** Captured output belongs to a physical execution directory, with one
+    [.output] file per test case. A platform with complete-run ownership wraps
+    the full execution and report in {!with_run}; the Unix backend uses leases
+    and retained latest/failure references to retire only registered completed
+    output. The shipped preparation-only maker remains available as an unmanaged
+    compatibility constructor. Diagnostic paths always name the physical
+    execution, even while a concurrent run replaces public aliases. *)
 
-    {[
-      <log_capture_root_dir>
-      ├── E0965BF9/...
-      ├── 6DDB68D5/                 ;; ID for each test run
-      │   │
-      │   ├── alpha.000.output      ;; ... containing files for individual tests
-      │   ├── alpha.001.output      ;;     with format <test_name>.<index>.output.
-      │   └── beta.000.output
-      │
-      ├── latest/                   ;; Symlink to most recent UUID
-      └── <suite_name>/             ;; Symlink to most recent <suite_name> UUID
-    ]} *)
 module type S = sig
   type 'a promise
   type t
 
   val inactive : t
   val active : root:string -> uuid:string -> suite_name:string -> t
+
+  val with_run : t -> (unit -> int promise) -> int promise
+  (** Own captured logs for the complete run and report its failure count. *)
 
   val with_captured_logs :
     t -> Test_name.t -> ('a -> 'b promise) -> 'a -> 'b promise
@@ -52,6 +46,6 @@ module type Log_trap = sig
 
   module Make
       (Promise : Monad.EXTENDED)
-      (_ : Platform.S with type 'a promise := 'a Promise.t) :
+      (_ : Platform.S_with_log_trap with type 'a promise := 'a Promise.t) :
     S with type 'a promise := 'a Promise.t
 end
