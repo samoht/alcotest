@@ -152,7 +152,7 @@ let refusal runner root =
   let before = entries root and saved = contents failure in
   for _ = 1 to 2 do
     let result, diagnostic = run runner root "guard" "pass" "must refuse" in
-    check (result <> Unix.WEXITED 0) "unowned symlink was accepted for deletion";
+    status 2 result diagnostic;
     check
       (Astring.String.is_infix ~affix:"foreign.output" diagnostic)
       (Fmt.str "expected foreign.output refusal, observed %S" diagnostic);
@@ -168,9 +168,9 @@ let refusal runner root =
   Unix.unlink (latest / "foreign.output");
   Support.write (latest / "unrecognized") "not a framework output";
   let result, diagnostic = run runner root "guard" "pass" "must refuse" in
+  status 2 result diagnostic;
   check
-    (result <> Unix.WEXITED 0
-    && Astring.String.is_infix ~affix:"unrecognized" diagnostic)
+    (Astring.String.is_infix ~affix:"unrecognized" diagnostic)
     "unknown file accepted";
   check (entries root = before) "refusal allocated a run";
   Unix.unlink (latest / "unrecognized");
@@ -178,9 +178,11 @@ let refusal runner root =
   Fun.protect
     ~finally:(fun () -> Unix.chmod latest 0o700)
     (fun () ->
-      let result, _ = run runner root "guard" "pass" "must refuse" in
-      check (result <> Unix.WEXITED 0)
-        "read-only output accepted for retirement";
+      let result, diagnostic = run runner root "guard" "pass" "must refuse" in
+      status 2 result diagnostic;
+      check
+        (Astring.String.is_infix ~affix:"access" diagnostic)
+        "read-only output was not refused at the permission preflight";
       check
         (entries root = before && contents failure = saved)
         "permission refusal changed retained logs")
