@@ -1,0 +1,20 @@
+(library
+ (name alcotest_log_tests)
+ (wrapped false)
+ (modules test_support)
+ (libraries fmt unix))
+
+(executable
+ (name runner)
+ (modules runner)
+ (libraries alcotest))
+
+(test
+ (enabled_if
+  (= %{os_type} Unix))
+ (name retention)
+ (modules retention)
+ (libraries alcotest_log_tests fmt astring unix)
+ (action
+  (run %{exe:retention.exe} %{exe:runner.exe})))
+
