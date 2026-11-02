@@ -1,512 +1,335 @@
-(executables
- (names
-   and_exit_false
-   and_exit_true
-   assert_and_verbose
-   assert_not_printed
-   basic
-   check_basic
-   cli_verbose
-   compact
-   empty_test_name
-   explicit_command_options
-   filter_name
-   filter_name_regex
-   filter_range
-   isatty
-   json_output
-   list_tests
-   match_raises
-   only_monadic_effects
-   quick_only
-   quick_only_regex
-   separator_testname
-   skip_in_test
-   unicode_testname
-   verbose_newlines
- )
- (libraries alcotest alcotest.stdlib_ext alcotest.engine)
+(test
+ (name and_exit_false)
+ (package alcotest)
+ (libraries alcotest fmt)
+ (modules and_exit_false)
  (modes exe)
- (modules
-   and_exit_false
-   and_exit_true
-   assert_and_verbose
-   assert_not_printed
-   basic
-   check_basic
-   cli_verbose
-   compact
-   empty_test_name
-   explicit_command_options
-   filter_name
-   filter_name_regex
-   filter_range
-   isatty
-   json_output
-   list_tests
-   match_raises
-   only_monadic_effects
-   quick_only
-   quick_only_regex
-   separator_testname
-   skip_in_test
-   unicode_testname
-   verbose_newlines
- )
-)
-
-(rule
- (target and_exit_false.actual)
+ (deps and_exit_false.expected)
  (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:and_exit_false.exe})))))
+  (progn
+   (with-outputs-to and_exit_false.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} and_exit_false.actual))))
 
-(rule
- (target and_exit_false.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:and_exit_false.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name and_exit_true)
  (package alcotest)
+ (libraries alcotest fmt)
+ (modules and_exit_true)
+ (modes exe)
+ (deps and_exit_true.expected)
  (action
-   (diff and_exit_false.expected and_exit_false.processed)))
+  (progn
+   (with-outputs-to and_exit_true.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} and_exit_true.actual))))
 
-(rule
- (target and_exit_true.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:and_exit_true.exe})))))
-
-(rule
- (target and_exit_true.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:and_exit_true.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name assert_and_verbose)
  (package alcotest)
+ (libraries alcotest fmt)
+ (modules assert_and_verbose)
+ (modes exe)
+ (deps assert_and_verbose.expected)
  (action
-   (diff and_exit_true.expected and_exit_true.processed)))
+  (progn
+   (with-outputs-to assert_and_verbose.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} assert_and_verbose.actual))))
 
-(rule
- (target assert_and_verbose.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:assert_and_verbose.exe})))))
-
-(rule
- (target assert_and_verbose.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:assert_and_verbose.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name assert_not_printed)
  (package alcotest)
+ (libraries alcotest fmt)
+ (modules assert_not_printed)
+ (modes exe)
+ (deps assert_not_printed.expected)
  (action
-   (diff assert_and_verbose.expected assert_and_verbose.processed)))
+  (progn
+   (with-outputs-to assert_not_printed.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} assert_not_printed.actual))))
 
-(rule
- (target assert_not_printed.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:assert_not_printed.exe})))))
-
-(rule
- (target assert_not_printed.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:assert_not_printed.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name basic)
  (package alcotest)
+ (libraries alcotest)
+ (modules basic)
+ (modes exe)
+ (deps basic.expected)
  (action
-   (diff assert_not_printed.expected assert_not_printed.processed)))
+  (progn
+   (with-outputs-to basic.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} basic.actual))))
 
-(rule
- (target basic.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:basic.exe})))))
-
-(rule
- (target basic.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:basic.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name check_basic)
  (package alcotest)
+ (libraries alcotest)
+ (modules check_basic)
+ (modes exe)
+ (deps check_basic.expected)
  (action
-   (diff basic.expected basic.processed)))
+  (progn
+   (with-outputs-to check_basic.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} check_basic.actual))))
 
-(rule
- (target check_basic.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:check_basic.exe})))))
-
-(rule
- (target check_basic.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:check_basic.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name cli_verbose)
  (package alcotest)
+ (libraries alcotest fmt)
+ (modules cli_verbose)
+ (modes exe)
+ (deps cli_verbose.expected)
  (action
-   (diff check_basic.expected check_basic.processed)))
+  (progn
+   (with-outputs-to cli_verbose.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test} --verbose)))
+   (run %{dep:../../strip_randomness.exe} cli_verbose.actual))))
 
-(rule
- (target cli_verbose.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:cli_verbose.exe} --verbose)))))
-
-(rule
- (target cli_verbose.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:cli_verbose.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name compact)
  (package alcotest)
+ (libraries alcotest alcotest.stdlib_ext fmt)
+ (modules compact)
+ (modes exe)
+ (deps compact.expected)
  (action
-   (diff cli_verbose.expected cli_verbose.processed)))
+  (progn
+   (with-outputs-to compact.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test} --compact)))
+   (run %{dep:../../strip_randomness.exe} compact.actual))))
 
-(rule
- (target compact.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:compact.exe} --compact)))))
-
-(rule
- (target compact.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:compact.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name empty_test_name)
  (package alcotest)
+ (libraries alcotest)
+ (modules empty_test_name)
+ (modes exe)
+ (deps empty_test_name.expected)
  (action
-   (diff compact.expected compact.processed)))
+  (progn
+   (with-outputs-to empty_test_name.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} empty_test_name.actual))))
 
-(rule
- (target empty_test_name.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:empty_test_name.exe})))))
-
-(rule
- (target empty_test_name.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:empty_test_name.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name explicit_command_options)
  (package alcotest)
+ (libraries alcotest)
+ (modules explicit_command_options)
+ (modes exe)
+ (deps explicit_command_options.expected)
  (action
-   (diff empty_test_name.expected empty_test_name.processed)))
+  (progn
+   (with-outputs-to explicit_command_options.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} explicit_command_options.actual))))
 
-(rule
- (target explicit_command_options.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:explicit_command_options.exe})))))
-
-(rule
- (target explicit_command_options.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:explicit_command_options.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name filter_name)
  (package alcotest)
+ (libraries alcotest)
+ (modules filter_name)
+ (modes exe)
+ (deps filter_name.expected)
  (action
-   (diff explicit_command_options.expected explicit_command_options.processed)))
+  (progn
+   (with-outputs-to filter_name.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} filter_name.actual))))
 
-(rule
- (target filter_name.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:filter_name.exe})))))
-
-(rule
- (target filter_name.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:filter_name.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name filter_name_regex)
  (package alcotest)
+ (libraries alcotest)
+ (modules filter_name_regex)
+ (modes exe)
+ (deps filter_name_regex.expected)
  (action
-   (diff filter_name.expected filter_name.processed)))
+  (progn
+   (with-outputs-to filter_name_regex.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} filter_name_regex.actual))))
 
-(rule
- (target filter_name_regex.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:filter_name_regex.exe})))))
-
-(rule
- (target filter_name_regex.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:filter_name_regex.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name filter_range)
  (package alcotest)
+ (libraries alcotest alcotest.stdlib_ext fmt)
+ (modules filter_range)
+ (modes exe)
+ (deps filter_range.expected)
  (action
-   (diff filter_name_regex.expected filter_name_regex.processed)))
+  (progn
+   (with-outputs-to filter_range.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test} test main 0..1,1-3,5)))
+   (run %{dep:../../strip_randomness.exe} filter_range.actual))))
 
-(rule
- (target filter_range.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:filter_range.exe} test main 0..1,1-3,5)))))
-
-(rule
- (target filter_range.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:filter_range.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name isatty)
  (package alcotest)
+ (libraries alcotest alcotest.engine)
+ (modules isatty)
+ (modes exe)
+ (deps isatty.expected)
  (action
-   (diff filter_range.expected filter_range.processed)))
+  (progn
+   (with-outputs-to isatty.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} isatty.actual))))
 
-(rule
- (target isatty.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:isatty.exe})))))
-
-(rule
- (target isatty.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:isatty.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name json_output)
  (package alcotest)
+ (libraries alcotest)
+ (modules json_output)
+ (modes exe)
+ (deps json_output.expected)
  (action
-   (diff isatty.expected isatty.processed)))
+  (progn
+   (with-outputs-to json_output.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} json_output.actual))))
 
-(rule
- (target json_output.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:json_output.exe})))))
-
-(rule
- (target json_output.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:json_output.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name list_tests)
  (package alcotest)
+ (libraries alcotest)
+ (modules list_tests)
+ (modes exe)
+ (deps list_tests.expected)
  (action
-   (diff json_output.expected json_output.processed)))
+  (progn
+   (with-outputs-to list_tests.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} list_tests.actual))))
 
-(rule
- (target list_tests.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:list_tests.exe})))))
-
-(rule
- (target list_tests.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:list_tests.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name match_raises)
  (package alcotest)
+ (libraries alcotest)
+ (modules match_raises)
+ (modes exe)
+ (deps match_raises.expected)
  (action
-   (diff list_tests.expected list_tests.processed)))
+  (progn
+   (with-outputs-to match_raises.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} match_raises.actual))))
 
-(rule
- (target match_raises.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:match_raises.exe})))))
-
-(rule
- (target match_raises.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:match_raises.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name only_monadic_effects)
  (package alcotest)
+ (libraries alcotest fmt alcotest.engine)
+ (modules only_monadic_effects)
+ (modes exe)
+ (deps only_monadic_effects.expected)
  (action
-   (diff match_raises.expected match_raises.processed)))
+  (progn
+   (with-outputs-to only_monadic_effects.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} only_monadic_effects.actual))))
 
-(rule
- (target only_monadic_effects.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:only_monadic_effects.exe})))))
-
-(rule
- (target only_monadic_effects.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:only_monadic_effects.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name quick_only)
  (package alcotest)
+ (libraries alcotest)
+ (modules quick_only)
+ (modes exe)
+ (deps quick_only.expected)
  (action
-   (diff only_monadic_effects.expected only_monadic_effects.processed)))
+  (progn
+   (with-outputs-to quick_only.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} quick_only.actual))))
 
-(rule
- (target quick_only.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:quick_only.exe})))))
-
-(rule
- (target quick_only.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:quick_only.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name quick_only_regex)
  (package alcotest)
+ (libraries alcotest)
+ (modules quick_only_regex)
+ (modes exe)
+ (deps quick_only_regex.expected)
  (action
-   (diff quick_only.expected quick_only.processed)))
+  (progn
+   (with-outputs-to quick_only_regex.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} quick_only_regex.actual))))
 
-(rule
- (target quick_only_regex.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:quick_only_regex.exe})))))
-
-(rule
- (target quick_only_regex.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:quick_only_regex.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name separator_testname)
  (package alcotest)
+ (libraries alcotest)
+ (modules separator_testname)
+ (modes exe)
+ (deps separator_testname.expected)
  (action
-   (diff quick_only_regex.expected quick_only_regex.processed)))
+  (progn
+   (with-outputs-to separator_testname.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} separator_testname.actual))))
 
-(rule
- (target separator_testname.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:separator_testname.exe})))))
-
-(rule
- (target separator_testname.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:separator_testname.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name skip_in_test)
  (package alcotest)
+ (libraries alcotest)
+ (modules skip_in_test)
+ (modes exe)
+ (deps skip_in_test.expected)
  (action
-   (diff separator_testname.expected separator_testname.processed)))
+  (progn
+   (with-outputs-to skip_in_test.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} skip_in_test.actual))))
 
-(rule
- (target skip_in_test.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:skip_in_test.exe})))))
-
-(rule
- (target skip_in_test.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:skip_in_test.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name unicode_testname)
  (package alcotest)
+ (libraries alcotest)
+ (modules unicode_testname)
+ (modes exe)
+ (deps unicode_testname.expected)
  (action
-   (diff skip_in_test.expected skip_in_test.processed)))
+  (progn
+   (with-outputs-to unicode_testname.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} unicode_testname.actual))))
 
-(rule
- (target unicode_testname.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:unicode_testname.exe})))))
-
-(rule
- (target unicode_testname.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:unicode_testname.actual}))))
-
-(rule
- (alias runtest)
+(test
+ (name verbose_newlines)
  (package alcotest)
+ (libraries alcotest fmt)
+ (modules verbose_newlines)
+ (modes exe)
+ (deps verbose_newlines.expected)
  (action
-   (diff unicode_testname.expected unicode_testname.processed)))
-
-(rule
- (target verbose_newlines.actual)
- (action
-  (with-outputs-to %{target}
-   (with-accepted-exit-codes (or 0 124 125)
-    (run %{dep:verbose_newlines.exe})))))
-
-(rule
- (target verbose_newlines.processed)
- (action
-  (with-outputs-to %{target}
-   (run ../../strip_randomness.exe %{dep:verbose_newlines.actual}))))
-
-(rule
- (alias runtest)
- (package alcotest)
- (action
-   (diff verbose_newlines.expected verbose_newlines.processed)))
+  (progn
+   (with-outputs-to verbose_newlines.actual
+    (with-accepted-exit-codes (or 0 124 125)
+     (run %{test})))
+   (run %{dep:../../strip_randomness.exe} verbose_newlines.actual))))

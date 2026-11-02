@@ -35,7 +35,10 @@ The high-level project structure is as follows:
 │   │   │
 │   │   ├── pp.ml             # Pretty-printers for Alcotest output
 │   │   ├── test.ml           # Combinators for test assertions (with `Alcotest.check`)
-│   │   └── utils.ml          # Standard-library extension
+│   │   └── safe_string.ml    # Safe diagnostic names
+│   │
+│   ├── alcotest-stdlib-ext/
+│   │   └── alcotest_stdlib_ext.ml # Compiler-compatible helpers
 │   │
 │   │                         # Native backend:
 │   └── alcotest/             # - Unix-specific API
@@ -65,6 +68,13 @@ test/e2e/alcotest/passing/
 ├── basic.expected    # The expected output of the test case
 └── basic.opts        # OPTIONAL: command-line options to pass to the test
 ```
+
+The generator derives each fixture's libraries from the OCaml compiler's
+module dependency collector and emits a native Dune `test` stanza. Its action
+runs the fixture with its `.opts`, passes the captured output through the
+sanitizer, then lets Dune compare stdout with the adjacent `.expected` file.
+The expected file is a required dependency: adding a fixture without its
+snapshot fails the build.
 
 If you change the Alcotest output in some way, you will likely need to update
 the expect test snapshots:

@@ -32,12 +32,12 @@ let () =
           [
             Runner.test_case "check + stdout + stderr" `Quick (fun () ->
                 Alcotest.(check unit) "SHOULD NOT BE PRINTED" () ();
-                Format.printf "stdout: SHOULD NOT BE PRINTED\n";
-                Format.eprintf "stderr: SHOULD NOT BE PRINTED\n";
+                Fmt.pr "stdout: SHOULD NOT BE PRINTED\n";
+                Fmt.epr "stderr: SHOULD NOT BE PRINTED\n";
                 assert false);
           ] );
       ]
   in
-  Format.pp_print_flush Format.std_formatter ();
-  Format.pp_print_flush Format.err_formatter ();
+  Fmt.pr "%!";
+  Fmt.epr "%!";
   ()

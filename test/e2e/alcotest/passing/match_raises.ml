@@ -1,6 +1,8 @@
-let to_test () = raise (Failure "")
+let raise_failure () = raise (Failure "")
 let expect_failure = function Failure _ -> true | _ -> false
-let test () = Alcotest.match_raises "Generates Failure" expect_failure to_test
+
+let test () =
+  Alcotest.match_raises "Generates Failure" expect_failure raise_failure
 
 let () =
   Alcotest.run "Exceptions"

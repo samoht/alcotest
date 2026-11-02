@@ -65,6 +65,6 @@ let suite2 =
 let () =
   try Alcotest.run ~and_exit:false "First suite" suite1
   with Alcotest.Test_error ->
-    Printf.printf "Forging ahead regardless!\n%!";
+    Fmt.pr "Forging ahead regardless!\n%!";
     Alcotest.run ~and_exit:false "Second suite" suite2;
-    Printf.printf "Finally done."
+    Fmt.pr "Finally done."

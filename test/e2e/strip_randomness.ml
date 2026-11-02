@@ -133,11 +133,11 @@ let () =
       let unknown_last =
         match sanitized_line with
         | `Some s ->
-            Printf.printf "%s\n" s;
+            Fmt.pr "%s\n" s;
             false
         | `None -> false
         | `Unknown s ->
-            if not unknown_last then Printf.printf "%s\n" s;
+            if not unknown_last then Fmt.pr "%s\n" s;
             true
       in
       loop unknown_last

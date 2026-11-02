@@ -12,13 +12,13 @@ let () =
           Alcotest.test_case "0" `Quick (fun () ->
               Alcotest.(check unit) (s "0") () ());
           Alcotest.test_case "1" `Quick (fun () ->
-              Format.eprintf "%s" (s "1");
+              Fmt.epr "%s" (s "1");
               Alcotest.(check unit) (s "1") () ());
         ] );
       ( "beta",
         [
           Alcotest.test_case "2" `Quick (fun () ->
               Alcotest.(check unit) "2" () ();
-              Format.eprintf "%s" (s "2"));
+              Fmt.epr "%s" (s "2"));
         ] );
     ]

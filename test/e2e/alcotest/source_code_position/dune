@@ -16,9 +16,9 @@
  (modules caml_ld_library_path))
 
 (executable
- (name test_source_code_position)
- (libraries alcotest astring)
- (modules test_source_code_position)
+ (name main)
+ (libraries alcotest astring fmt)
+ (modules main)
  (modes exe byte))
 
 (rule
@@ -31,9 +31,7 @@
     (or 1 2 124 125)
     (with-outputs-to
      %{target}
-     (run
-      %{dep:caml_ld_library_path.exe}
-      %{dep:test_source_code_position.bc}))))))
+     (run %{dep:caml_ld_library_path.exe} %{dep:main.bc}))))))
 
 (rule
  (target without-position.actual)
@@ -45,7 +43,7 @@
     (or 1 2 124 125)
     (with-outputs-to
      %{target}
-     (run %{dep:test_source_code_position.exe}))))))
+     (run %{dep:main.exe}))))))
 
 (rule
  (target pre-4.12.actual)
@@ -57,7 +55,7 @@
     (or 1 2 124 125)
     (with-outputs-to
      %{target}
-     (run %{dep:test_source_code_position.exe}))))))
+     (run %{dep:main.exe}))))))
 
 (rule
  (target with-position.processed)

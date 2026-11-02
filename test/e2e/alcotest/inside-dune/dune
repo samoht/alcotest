@@ -1,8 +1,8 @@
 (executable
- (name test_color)
+ (name main)
  (libraries alcotest))
 
-;; Run `test_color` with `--color=auto`
+;; Run `main` with `--color=auto`
 
 (rule
  (target color-overridden.actual)
@@ -10,7 +10,7 @@
   (with-outputs-to
    %{target}
    ;; `--color=auto` passed → output should _not_ be colored due to Dune's buffering
-   (run %{dep:test_color.exe} --color=auto))))
+   (run %{dep:main.exe} --color=auto))))
 
 (rule
  (target color-overridden.processed)

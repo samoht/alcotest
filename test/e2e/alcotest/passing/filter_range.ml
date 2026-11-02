@@ -7,7 +7,7 @@ let () =
   in
   let tests =
     List.init 6 (fun i ->
-        Alcotest.test_case (Printf.sprintf "test-%d" i) `Quick (fun () ->
+        Alcotest.test_case (Fmt.str "test-%d" i) `Quick (fun () ->
             if not (should_run i) then failwith "Test should have been skipped"))
   in
   Alcotest.run __FILE__ [ ("main", tests) ]

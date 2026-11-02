@@ -8,6 +8,6 @@ let () =
       ( "alpha",
         [
           test_case "0" `Quick (fun () ->
-              Format.printf "SHOULD APPEAR IN TEST OUTPUT\n");
+              Fmt.pr "SHOULD APPEAR IN TEST OUTPUT\n");
         ] );
     ]

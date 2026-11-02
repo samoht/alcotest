@@ -3,7 +3,8 @@ let () =
   Printexc.record_backtrace false;
   let during = ref None in
   Alcotest.run ~and_exit:false ~record_backtrace:false
-    ~argv:[| "explicit-options"; "test" |] __FILE__
+    ~argv:[| "explicit-options"; "test" |]
+    __FILE__
     [
       ( "options",
         [

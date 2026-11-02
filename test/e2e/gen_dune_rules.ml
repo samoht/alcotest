@@ -19,28 +19,35 @@ let options_of_test_file file =
   let options_file = chop_extension file ^ ".opts" in
   if not (Sys.file_exists options_file) then [] else read_file options_file
 
-let global_stanza ~libraries filenames =
-  let bases = List.map chop_extension filenames in
-  let libraries = List.map (( ^ ) " ") libraries in
-  let pp_sexp_list = Fmt.(list ~sep:(const string "\n   ")) in
-  Fmt.pr
-    {|(executables
- (names
-   %a
- )
- (libraries alcotest alcotest.stdlib_ext%a)
- %s
- (modules
-   %a
- )
-)
-|}
-    (pp_sexp_list Fmt.string) bases
-    Fmt.(list string)
-    libraries "(modes exe)" (pp_sexp_list Fmt.string) bases
+(* Use the compiler's dependency collector rather than duplicate the
+   fixture's imports in per-case library lists. *)
+let libraries_of_file ~libraries filename =
+  let channel = open_in filename in
+  let structure =
+    Fun.protect
+      ~finally:(fun () -> close_in channel)
+      (fun () ->
+        let lexbuf = Lexing.from_channel channel in
+        Location.init lexbuf filename;
+        Parse.implementation lexbuf)
+  in
+  Depend.free_structure_names := Depend.String.Set.empty;
+  Depend.add_implementation Depend.String.Map.empty structure;
+  let imports = !Depend.free_structure_names in
+  List.filter
+    (fun library ->
+      let root =
+        String.map (function '.' -> '_' | c -> c) library
+        |> String.capitalize_ascii
+      in
+      Depend.String.Set.mem root imports)
+    ([ "alcotest"; "alcotest.stdlib_ext"; "fmt" ] @ libraries)
 
-let example_rule_stanza ~expect_failure filename =
+(* Each fixture is a real Dune test: its executable, options, sanitizer and
+   exact transcript comparison belong to one action and one test stanza. *)
+let example_stanza ~package ~expect_failure ~libraries filename =
   let base = chop_extension filename in
+  let libraries = libraries_of_file ~libraries filename in
   let options = options_of_test_file filename |> List.map (( ^ ) " ") in
   let accepted_exit_codes =
     Fmt.str "(or %s %d %d)"
@@ -50,43 +57,26 @@ let example_rule_stanza ~expect_failure filename =
        else "0")
       Cmdliner.Cmd.Exit.cli_error Cmdliner.Cmd.Exit.internal_error
   in
-  (* Run Alcotest to get *.actual, then pass through the strip_randomness
-     sanitiser to get *.processed. *)
   Fmt.pr
-    {|
-(rule
- (target %s.actual)
- (action
-  (with-outputs-to %%{target}
-   (with-accepted-exit-codes %s
-    (run %s%a)))))
-|}
-    base accepted_exit_codes
-    (Printf.sprintf "%%{dep:%s.exe}" base)
-    Fmt.(list string)
-    options;
-
-  Fmt.pr
-    {|
-(rule
- (target %s.processed)
- (action
-  (with-outputs-to %%{target}
-   (run ../../strip_randomness.exe %%{dep:%s.actual}))))
-|}
-    base base
-
-let example_alias_stanza ~package filename =
-  let base = chop_extension filename in
-  Fmt.pr
-    {|
-(rule
- (alias %s)
+    {|(test
+ (name %s)
  (package %s)
+ (libraries %a)
+ (modules %s)
+ (modes exe)
+ (deps %s.expected)
  (action
-   (diff %s.expected %s.processed)))
+  (progn
+   (with-outputs-to %s.actual
+    (with-accepted-exit-codes %s
+     (run %%{test}%a)))
+   (run %%{dep:../../strip_randomness.exe} %s.actual))))
 |}
-    "runtest" package base base
+    base package
+    Fmt.(list ~sep:(const string " ") string)
+    libraries base base base accepted_exit_codes
+    Fmt.(list string)
+    options base
 
 let is_example filename = Filename.check_suffix filename ".ml"
 
@@ -98,11 +88,10 @@ let main package expect_failure libraries =
   |> function
   | [] -> () (* no tests to execute *)
   | tests ->
-      global_stanza ~libraries tests;
-      List.iter
-        (fun test ->
-          example_rule_stanza ~expect_failure test;
-          example_alias_stanza ~package test)
+      List.iteri
+        (fun i test ->
+          if i > 0 then Fmt.pr "\n";
+          example_stanza ~package ~expect_failure ~libraries test)
         tests
 
 open Cmdliner
@@ -116,7 +105,8 @@ let package =
 
 let libraries =
   let doc =
-    Arg.info ~doc:"Additional libraries to make available to the executable"
+    Arg.info
+      ~doc:"Additional libraries selected when their root module is imported"
       [ "libraries" ]
   in
   Arg.(value & opt (list string) [] & doc)

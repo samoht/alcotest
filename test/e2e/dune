@@ -10,10 +10,10 @@
 
 (executable
  (name gen_dune_rules)
- (libraries cmdliner fmt)
+ (libraries cmdliner fmt compiler-libs.common)
  (modules gen_dune_rules))
 
 (executable
  (name strip_randomness)
- (libraries unix re)
+ (libraries unix re fmt)
  (modules strip_randomness))
