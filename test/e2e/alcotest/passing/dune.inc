@@ -9,6 +9,7 @@
    cli_verbose
    compact
    empty_test_name
+   explicit_command_options
    filter_name
    filter_name_regex
    filter_range
@@ -36,6 +37,7 @@
    cli_verbose
    compact
    empty_test_name
+   explicit_command_options
    filter_name
    filter_name_regex
    filter_range
@@ -223,6 +225,25 @@
  (package alcotest)
  (action
    (diff empty_test_name.expected empty_test_name.processed)))
+
+(rule
+ (target explicit_command_options.actual)
+ (action
+  (with-outputs-to %{target}
+   (with-accepted-exit-codes (or 0 124 125)
+    (run %{dep:explicit_command_options.exe})))))
+
+(rule
+ (target explicit_command_options.processed)
+ (action
+  (with-outputs-to %{target}
+   (run ../../strip_randomness.exe %{dep:explicit_command_options.actual}))))
+
+(rule
+ (alias runtest)
+ (package alcotest)
+ (action
+   (diff explicit_command_options.expected explicit_command_options.processed)))
 
 (rule
  (target filter_name.actual)

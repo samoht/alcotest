@@ -1,0 +1,10 @@
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/explicit_command_options.ml'.
+This run has ID `<uuid>'.
+
+  [OK]          options          0   observe the caller's backtrace setting.
+
+Full test results in `<build-context>/_build/_tests/<test-dir>'.
+Test Successful in <test-duration>s. 1 test run.
+ASSERT caller backtrace setting inside test
+ASSERT caller backtrace setting after command
+Explicit test command returned to its caller.
