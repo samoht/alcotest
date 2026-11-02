@@ -18,8 +18,7 @@
     "alcotest"
     --libraries
     "alcotest.engine"
-    --expect-failure
-    --js))))
+    --expect-failure))))
 
 (rule
  (alias runtest)

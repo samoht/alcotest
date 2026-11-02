@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/filter_name.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/filter_name.ml'.
 This run has ID `<uuid>'.
 
   [OK]          test-a          0   First test case.

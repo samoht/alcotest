@@ -184,14 +184,14 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
    fun args ->
     M.catch
       (fun () -> f args >|= fun () -> `Ok)
-      ((function
-         | Check_error err ->
-             let err = Fmt.(err ++ const string (bt ())) in
-             `Error (path, err)
-         | Skip -> `Skip
-         | Failure s -> exn path "failure" Fmt.(const string s)
-         | Invalid_argument s -> exn path "invalid" Fmt.(const string s)
-         | e -> exn path "exception" Fmt.(const exn e))
+      (( function
+       | Check_error err ->
+           let err = Fmt.(err ++ const string (bt ())) in
+           `Error (path, err)
+       | Skip -> `Skip
+       | Failure s -> exn path "failure" Fmt.(const string s)
+       | Invalid_argument s -> exn path "invalid" Fmt.(const string s)
+       | e -> exn path "exception" Fmt.(const exn e) )
       >> M.return)
 
   type running_state = { tests_so_far : int; first_error : int option }
@@ -294,9 +294,9 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
     let filter_test_case = filter_test_case path in
     test_cases
     |> List.filter_map (fun tc ->
-           if filter_test_case tc then Some tc
-           else if subst then Some (skip_label tc)
-           else None)
+        if filter_test_case tc then Some tc
+        else if subst then Some (skip_label tc)
+        else None)
 
   let select_speed speed_level (test_case : 'a Suite.test_case as 'tc) : 'tc =
     if compare_speed_level test_case.speed_level speed_level >= 0 then test_case

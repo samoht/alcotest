@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/failing/check_located.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml'.
 This run has ID `<uuid>'.
 
 ASSERT Expected failure
@@ -17,7 +17,7 @@ ASSERT Expected failure
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        check                 0   here.                                │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
 FAIL Expected failure
 
    Expected: `true'
@@ -31,7 +31,7 @@ FAIL Expected failure
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        check                 1   pos.                                 │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
 FAIL Expected failure
 
    Expected: `true'
@@ -45,7 +45,7 @@ FAIL Expected failure
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        check_raises          0   here.                                │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
 FAIL Expected failure: expecting Failure(""), got nothing.
 <stacktrace>
 
@@ -55,7 +55,7 @@ FAIL Expected failure: expecting Failure(""), got nothing.
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        check_raises          1   pos.                                 │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
 FAIL Expected failure: expecting Failure(""), got nothing.
 <stacktrace>
 
@@ -65,7 +65,7 @@ FAIL Expected failure: expecting Failure(""), got nothing.
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        fail                  0   here.                                │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 2, character 30:
 FAIL Expected failure
 <stacktrace>
 
@@ -75,7 +75,7 @@ FAIL Expected failure
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │ [FAIL]        fail                  1   pos.                                 │
 └──────────────────────────────────────────────────────────────────────────────┘
-File "test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
+File "ocaml-alcotest/test/e2e/alcotest/failing/check_located.ml", line 4, character 10:
 FAIL Expected failure
 <stacktrace>
 

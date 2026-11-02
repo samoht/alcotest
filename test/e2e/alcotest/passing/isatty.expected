@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/isatty.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/isatty.ml'.
 This run has ID `<uuid>'.
 
   ...           test-a          0   First test case.  [OK]          test-a          0   First test case.

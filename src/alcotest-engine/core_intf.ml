@@ -120,7 +120,8 @@ module type Core = sig
     (** Functor for building a tester that sequences tests of type
         [('a -> unit M.t)] within a given concurrency monad [M.t]. The [run] and
         [run_with_args] functions must be scheduled in a global event loop.
-        Intended for use by the {!Alcotest_lwt} and {!Alcotest_async} backends. *)
+        Intended for use by the {!Alcotest_lwt} and {!Alcotest_async} backends.
+    *)
 
     exception Skip
   end

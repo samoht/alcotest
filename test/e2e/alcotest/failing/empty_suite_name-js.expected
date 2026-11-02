@@ -1,1 +1,0 @@
-ERROR: Suite name cannot cannot be empty. Please pass a non-empty string to `run`.

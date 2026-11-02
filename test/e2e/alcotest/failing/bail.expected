@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/failing/bail.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/failing/bail.ml'.
 This run has ID `<uuid>'.
 
   [OK]          passing          0   a.

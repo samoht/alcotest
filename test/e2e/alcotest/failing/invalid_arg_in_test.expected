@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/failing/invalid_arg_in_test.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/failing/invalid_arg_in_test.ml'.
 This run has ID `<uuid>'.
 
   [OK]          test-a          0   Passing.

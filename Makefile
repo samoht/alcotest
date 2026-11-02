@@ -6,9 +6,6 @@ all:
 test:
 	dune build @runtest
 
-test-js:
-	dune build @runtest-js
-
 clean:
 	dune clean
 

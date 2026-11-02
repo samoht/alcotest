@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/inside-dune/test_color.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/inside-dune/test_color.ml'.
 This run has ID `<uuid>'.
 
   [OK]          alpha          0   Output may or may not contain ANSI escape ...

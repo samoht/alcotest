@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/filter_name_regex.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/filter_name_regex.ml'.
 This run has ID `<uuid>'.
 
   [OK]          basic-run-a            0   Executed.

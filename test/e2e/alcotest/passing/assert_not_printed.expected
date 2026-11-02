@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/assert_not_printed.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/assert_not_printed.ml'.
 This run has ID `<uuid>'.
 
   [OK]          alpha          0   0.

@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/separator_testname.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/separator_testname.ml'.
 This run has ID `<uuid>'.
 
   [OK]          with/separator          0   First test case.

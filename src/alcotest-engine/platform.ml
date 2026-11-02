@@ -26,7 +26,8 @@ module type S = sig
     Formatters.stderr ->
     unit
   (** [setup_std_outputs ~style_renderer ~utf_8 stdout stderr] is called at
-      startup of alcotest and sets up the standard streams for colored output. *)
+      startup of alcotest and sets up the standard streams for colored output.
+  *)
 
   val log_trap_supported : bool
   (** Whether or not the test runner should trap test logs. The following

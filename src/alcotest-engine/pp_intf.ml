@@ -89,8 +89,8 @@ module type Pp = sig
   (** This is for adding an 's' to words that should be pluralized, e.g.
 
       {[
-        let n = List.length items in
-        Fmt.pr "Found %i item%a." n pp_plural n
+      let n = List.length items in
+      Fmt.pr "Found %i item%a." n pp_plural n
       ]} *)
 
   module Make (_ : Make_arg) : S

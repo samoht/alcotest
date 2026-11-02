@@ -4,6 +4,4 @@
  (foreign_stubs
   (language c)
   (names alcotest_stubs))
- (js_of_ocaml
-  (javascript_files runtime.js))
  (preprocess future_syntax))

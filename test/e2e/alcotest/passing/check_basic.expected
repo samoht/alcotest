@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/check_basic.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/check_basic.ml'.
 This run has ID `<uuid>'.
 
   [OK]          reflexive basic              0   unit.

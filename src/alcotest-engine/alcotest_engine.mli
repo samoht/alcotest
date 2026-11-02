@@ -17,8 +17,8 @@
 (** [Alcotest_engine] provides a platform-independent test framework.
 
     The main building blocks and combinators are defined here. These can be used
-    to defined tests. The platform-specific runners for these tests are in
-    [alcotest], [alcotest-lwt], [alcotest-async] and [alcotest-mirage]. *)
+    to defined tests. The platform-specific runners for these tests are in the
+    native [alcotest] package. *)
 
 module V1 : sig
   (** Version 1 of the user-facing Alcotest API. *)
@@ -32,9 +32,8 @@ module V1 : sig
   (** These modules provide the ability to run tests inside a concurrency monad:
       that is, to sequence test cases of type ['a -> unit m] into a computation
       of type ['a -> unit m] (for some concurrency monad [m]) with can then be
-      scheduled in a main event loop. For tests using [Lwt.t] or
-      [Async_kernel.Deferred.t], use the [Alcotest_lwt] and [Alcotest_async]
-      packages directly. *)
+      scheduled in a main event loop. Custom platforms provide their own
+      concurrency implementation through {!Platform.MAKER}. *)
 
   module Core = Core.V1
   (** Defines monadic test runners {i without} command-line interfaces. *)

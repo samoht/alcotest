@@ -186,7 +186,7 @@ module Key = struct
         | exception Invalid_format ->
             Error
               (`Msg
-                "must be a comma-separated list of integers / integer ranges")
+                 "must be a comma-separated list of integers / integer ranges")
       in
       let print ppf set = Fmt.(braces @@ list ~sep:comma int) ppf set in
       Arg.conv (parse, print)

@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/quick_only.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/quick_only.ml'.
 This run has ID `<uuid>'.
 
   [OK]          test-a          0   Quick.

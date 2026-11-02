@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/verbose_newlines.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/verbose_newlines.ml'.
 This run has ID `<uuid>'.
 
 Print inside alpha  [OK]          alpha          0   0 newlines.

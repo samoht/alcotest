@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/failing/tail_errors_limit.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/failing/tail_errors_limit.ml'.
 This run has ID `<uuid>'.
 
 > [FAIL]        failing          0   test.

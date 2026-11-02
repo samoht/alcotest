@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/failing/check_basic.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/failing/check_basic.ml'.
 This run has ID `<uuid>'.
 
 ASSERT bool

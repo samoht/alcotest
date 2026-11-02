@@ -27,7 +27,10 @@ let check_caller caller entry =
 let get ?(__FUNCTION__ = "Alcotest_engine__Test.check") () =
   let caller = __FUNCTION__ in
   let open Printexc in
-  let callstack_depth = 3 (* this function, caller, bound of test *) in
+  let callstack_depth =
+    3
+    (* this function, caller, bound of test *)
+  in
   let raw_backtrace = get_callstack callstack_depth in
   let entries = raw_backtrace_entries raw_backtrace in
   if

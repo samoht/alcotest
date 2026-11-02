@@ -20,6 +20,11 @@ contributing to Alcotest, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 [docs]: https://mirage.github.io/alcotest/alcotest/Alcotest/index.html
 
+This monorepo fork imports the ISC-licensed 1.9.1 release. It maintains the
+native Unix runner, portable engine and standard-library helpers. The upstream
+Async, Lwt, Mirage and JavaScript package families are outside this fork's
+package scope; neither monorepo has callers of those backends.
+
 <hr/>
 
 ### Examples
@@ -185,51 +190,6 @@ test.exe: required option -n is missing
 $ test.exe test -n 42
 Testing foo.
 [OK]                all          0   int.
-```
-
-### Lwt
-
-Alcotest provides an `Alcotest_lwt` module that you could use to wrap
-Lwt test cases. The basic idea is that instead of providing a test
-function in the form `unit -> unit`, you provide one with the type
-`unit -> unit Lwt.t` and alcotest-lwt calls `Lwt_main.run` for you.
-
-However, there are a couple of extra features:
-
-- If an async exception occurs, it will cancel your test case for you
-  and fail it (rather than exiting the process).
-
-- You get given a switch, which will be turned off when the test case
-  finishes (or fails). You can use that to free up any resources.
-
-For instance:
-
-```ocaml
-let free () = print_endline "freeing all resources"; Lwt.return ()
-
-let test_lwt switch () =
-  Lwt_switch.add_hook (Some switch) free;
-  Lwt.async (fun () -> failwith "All is broken");
-  Lwt_unix.sleep 10.
-
-let () =
-  Lwt_main.run @@ Alcotest_lwt.run "foo" [
-    "all", [
-      Alcotest_lwt.test_case "one" `Quick test_lwt
-    ]
-  ]
-```
-
-Will generate:
-
-```sh-session
-$ test.exe
-Testing foo.
-[ERROR]             all          0   one.
--- all.000 [one.] Failed --
-in _build/_tests/all.000.output:
-freeing all resources
-[failure] All is broken
 ```
 
 ### Comparison with other testing frameworks

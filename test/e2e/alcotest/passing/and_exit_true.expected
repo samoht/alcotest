@@ -1,4 +1,4 @@
-Testing `test/e2e/alcotest/passing/and_exit_true.ml'.
+Testing `ocaml-alcotest/test/e2e/alcotest/passing/and_exit_true.ml'.
 This run has ID `<uuid>'.
 
   [OK]          test-a          0   Test case.

@@ -15,9 +15,7 @@ tests to run.
 maintainer: ["thomas@gazagnaire.org"]
 authors: ["Thomas Gazagnaire"]
 license: "ISC"
-homepage: "https://github.com/mirage/alcotest"
 doc: "https://mirage.github.io/alcotest"
-bug-reports: "https://github.com/mirage/alcotest/issues"
 depends: [
   "dune" {>= "3.0"}
   "ocaml" {>= "4.08"}
@@ -32,7 +30,6 @@ depends: [
 ]
 conflicts: [
   "result" {< "1.5"}
-  "js_of_ocaml-compiler" {< "5.8"}
 ]
 build: [
   ["dune" "subst"] {dev}
@@ -48,5 +45,5 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/mirage/alcotest.git"
+dev-repo: "https://github.com/samoht/alcotest"
 x-maintenance-intent: [ "(latest)" ]
