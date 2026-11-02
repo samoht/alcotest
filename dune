@@ -1,0 +1,11 @@
+(rule
+ (progn
+  (copy examples/simple.exe test.exe)
+  (with-stdout-to
+   alcotest-help.txt.actual
+   (run ./test.exe --help=plain))))
+
+(rule
+ (alias runtest)
+ (action
+  (diff alcotest-help.txt alcotest-help.txt.actual)))

@@ -1,0 +1,16 @@
+build: [
+  ["dune" "subst"] {dev}
+  [
+    "dune"
+    "build"
+    "-p"
+    name
+    "-j"
+    jobs
+    "@install"
+    "@runtest" {with-test}
+    "@runtest-js" {with-test}
+    "@doc" {with-doc}
+  ]
+]
+x-maintenance-intent: [ "(latest)" ]

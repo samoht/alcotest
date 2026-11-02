@@ -1,0 +1,96 @@
+name: build
+
+on:
+  pull_request:
+  push:
+  schedule:
+    # Prime the caches every Monday
+    - cron: 0 1 * * MON
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        packages:
+          - "."
+        runtest:
+          - true
+        ocaml-compiler:
+          - "5.x"
+          - "4.14"
+        include:
+          - os: macos-latest
+            ocaml-compiler: "4.14"
+            packages: "."
+            runtest: true
+
+          - os: windows-latest
+            ocaml-compiler: "4.14"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.08"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.09"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.10"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.11"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.12"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+          - os: ubuntu-latest
+            ocaml-compiler: "4.13"
+            packages: "alcotest alcotest-js alcotest-lwt alcotest-mirage"
+            opam-local-packages: "alcotest.opam alcotest-js.opam alcotest-lwt.opam alcotest-mirage.opam"
+            runtest: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set-up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+
+      - name: Set-up OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          opam-local-packages: ${{ matrix.opam-local-packages }}
+
+      - run: opam install ${{ matrix.packages }} --with-test --deps-only
+      - if: ${{ matrix.runtest }}
+        run: opam exec -- dune build @install @check @runtest @runtest-js
