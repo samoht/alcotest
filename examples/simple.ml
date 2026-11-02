@@ -25,6 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <http://unlicense.org/>
 *)
 
+(* $MDX part-begin=example *)
 (* A module with functions to test *)
 module To_test = struct
   let lowercase = String.lowercase_ascii
@@ -64,3 +65,4 @@ let () =
       ( "list-concat",
         [ Alcotest.test_case "List mashing" `Slow test_list_concat ] );
     ]
+(* $MDX part-end *)

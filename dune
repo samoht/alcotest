@@ -1,3 +1,14 @@
+(env
+ (dev
+  (flags :standard %{dune-warnings})))
+
+(mdx
+ (files README.md)
+ (deps
+  examples/simple.exe
+  examples/with_args/main.exe
+  test/e2e/strip_randomness.exe))
+
 (rule
  (progn
   (copy examples/simple.exe test.exe)
