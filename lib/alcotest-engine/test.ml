@@ -210,7 +210,7 @@ let check (type a) ?here ?pos (t : a testable) msg (expected : a) (actual : a) =
       Fmt.pf ppf "   Received: `%a'" (styled `Red (pp t)) actual
     and here, pos =
       match (here, pos) with
-      | None, None -> (Callsite_loc.get (), None)
+      | None, None -> (Callsite_loc.find (), None)
       | _ -> (here, pos)
     in
     raise

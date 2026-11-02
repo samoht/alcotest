@@ -24,8 +24,7 @@ let check_caller caller entry =
       | _ -> false)
   | _ -> false
 
-let get ?(__FUNCTION__ = "Alcotest_engine__Test.check") () =
-  let caller = __FUNCTION__ in
+let frame ?__FUNCTION__:(caller = "Alcotest_engine__Test.check") () =
   let open Printexc in
   let callstack_depth =
     3
@@ -61,11 +60,10 @@ let get ?(__FUNCTION__ = "Alcotest_engine__Test.check") () =
     | _ -> None
   else None
 
-let get ?__FUNCTION__ () =
+let find ?__FUNCTION__:caller () =
   let guess =
-    match Sys.getenv "ALCOTEST_SOURCE_CODE_POSITION" with
-    | "" | "false" | "no" | "n" | "0" -> false
-    | "true" | "yes" | "y" | "1" -> true
-    | _ | (exception _) -> true
+    match Sys.getenv_opt "ALCOTEST_SOURCE_CODE_POSITION" with
+    | Some ("" | "false" | "no" | "n" | "0") -> false
+    | None | Some _ -> true
   in
-  if guess then get ?__FUNCTION__ () else None
+  if guess then frame ?__FUNCTION__:caller () else None

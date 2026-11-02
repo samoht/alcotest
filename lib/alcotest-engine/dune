@@ -13,12 +13,18 @@
  (action
   (write-file
    %{target}
-   "let get ?__FUNCTION__ () =\n  ignore __FUNCTION__;\n  None\n")))
+   "let find ?__FUNCTION__:caller () =\n  ignore caller;\n  None\n")))
+
+(rule
+ (target callsite_loc.mli)
+ (deps callsite_loc.412.mli)
+ (action
+  (copy %{deps} %{target})))
 
 (library
  (name alcotest_engine)
  (public_name alcotest.engine)
- (private_modules log_trap model safe_string)
+ (private_modules callsite_loc log_trap model safe_string)
  (libraries
   alcotest.stdlib_ext
   fmt
