@@ -15,7 +15,7 @@ tests to run.
 maintainer: ["thomas@gazagnaire.org"]
 authors: ["Thomas Gazagnaire"]
 license: "ISC"
-tags: ["org:blacksun" "test"]
+tags: ["org:blacksun" "test" "area:10011103"]
 doc: "https://mirage.github.io/alcotest"
 depends: [
   "dune" {>= "3.24"}

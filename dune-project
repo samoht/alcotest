@@ -11,7 +11,7 @@
 
 (package
  (name alcotest)
- (tags (org:blacksun test))
+ (tags (org:blacksun test area:10011103))
  (synopsis "Alcotest is a lightweight and colourful test framework")
  (documentation "https://mirage.github.io/alcotest")
  (description "\
