@@ -392,6 +392,10 @@ struct
   let run_with_args' (config : Config.User.t) name (type a) (args : a)
       (tl : a test list) =
     let config =
+      if P.log_trap_supported then config
+      else Config.User.(v ~verbose:true () || config)
+    in
+    let config =
       Config.apply_defaults ~default_log_dir:(default_log_dir ()) config
     in
     let t = empty ~config ~trap_logs:(not config#verbose) ~suite_name:name in

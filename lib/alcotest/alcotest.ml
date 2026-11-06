@@ -1,3 +1,8 @@
+(* Compiled to JavaScript the C stubs and most of Unix are absent: tests print
+   straight to the output, with no log store and no terminal size. *)
+let native =
+  match Sys.backend_type with Native | Bytecode -> true | Other _ -> false
+
 module Unix_platform (M : Alcotest_engine.Monad.S) = struct
   module M = Alcotest_engine.Monad.Extend (M)
   open M.Syntax
@@ -35,7 +40,7 @@ module Unix_platform (M : Alcotest_engine.Monad.S) = struct
     match Option.bind (Sys.getenv_opt "ALCOTEST_COLUMNS") int_of_string_opt with
     | Some columns when columns > 0 -> Some columns
     | _ -> (
-        match Terminal.dimensions () with
+        match if native then Terminal.dimensions () else None with
         | Some { columns; _ } when columns > 0 -> Some columns
         | _ -> None)
 
@@ -48,7 +53,7 @@ module Unix_platform (M : Alcotest_engine.Monad.S) = struct
 
   type file_descriptor = out_channel
 
-  let log_trap_supported = true
+  let log_trap_supported = native
   let file_exists = Sys.file_exists
   let open_write_only = open_out
   let close = close_out
