@@ -33,5 +33,4 @@
   fmt.cli
   re
   stdlib-shims
-  uutf)
- (preprocess future_syntax))
+  uutf))

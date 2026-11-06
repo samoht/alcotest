@@ -29,7 +29,6 @@ depends: [
   "re" {>= "1.7.2"}
   "stdlib-shims"
   "uutf" {>= "1.0.1"}
-  "ocaml-syntax-shims"
   "odoc" {with-doc}
 ]
 conflicts: [
