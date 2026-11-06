@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites time="<time>"><testsuite name="junit" tests="14" failures="3" errors="1" time="<time>" timestamp="<date>"><testcase name="pass" classname="junit.outcomes" time="<time>" file="test/e2e/alcotest/junit/test_junit.ml" line="23"/>
+<testsuites time="<time>"><testsuite name="junit" file="test/e2e/alcotest/junit/test_junit.ml" tests="14" failures="3" errors="1" time="<time>" timestamp="<date>"><testcase name="pass" classname="junit.outcomes" time="<time>" file="test/e2e/alcotest/junit/test_junit.ml" line="23"/>
 <testcase name="skip" classname="junit.outcomes" time="<time>" file="test/e2e/alcotest/junit/test_junit.ml" line="24"><skipped/>
 </testcase>
 <testcase name="not selected" classname="junit.outcomes" time="<time>" file="test/e2e/alcotest/junit/test_junit.ml" line="25"><skipped/>

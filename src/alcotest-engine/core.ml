@@ -62,7 +62,7 @@ let is_internal_frame slot =
   || List.mem library [ "Stdlib"; "Base"; "Core" ]
   || List.exists
        (fun affix -> String.is_prefix ~affix library)
-       [ "Alcotest"; "Lwt"; "Async" ]
+       [ "Alcotest"; "Lwt"; "Async"; "Cmdliner" ]
 
 (* Reading locations from [Printexc] slots, rather than parsing backtrace text,
    follows [Test_fmt.bt_slot_loc] in B0_testing by Daniel Bünzli:
@@ -80,9 +80,10 @@ let first_location slots =
   | location :: _ -> Some location
   | [] -> None
 
-(* The first caller outside Alcotest, if the executable has debug information. *)
-let caller_location () =
-  match Printexc.(backtrace_slots (get_callstack 16)) with
+(* The first caller outside Alcotest within [depth] frames, if the executable
+   has debug information. *)
+let caller_location ~depth =
+  match Printexc.(backtrace_slots (get_callstack depth)) with
   | None -> None
   | Some slots -> first_location (Array.to_list slots)
 
@@ -202,7 +203,8 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
 
   let test_case n t f =
     let case = (n, t, f) in
-    register_case_info case { location = caller_location (); children = None };
+    register_case_info case
+      { location = caller_location ~depth:16; children = None };
     case
 
   let test ?(tags = `Always) n f = test_case n tags f
@@ -241,6 +243,8 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
     log_trap : Log_trap.t;
     stdout : Formatters.stdout;
     stderr : Formatters.stderr;
+    file : string option;
+        (** The source file that calls [run], for the JUnit report. *)
   }
 
   let gen_run_id =
@@ -274,7 +278,17 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
     in
     let stdout = config#stdout in
     let stderr = config#stderr in
-    { suite; errors; max_label; config; run_id; log_trap; stdout; stderr }
+    {
+      suite;
+      errors;
+      max_label;
+      config;
+      run_id;
+      log_trap;
+      stdout;
+      stderr;
+      file = None;
+    }
 
   let pp_suite_results t =
     let log_dir =
@@ -448,7 +462,9 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
   let junit_open t =
     let path = Option.map (junit_file t) (Log_trap.run_dir t.log_trap) in
     let suite = Fmt.to_to_string Suite.pp_name t.suite in
-    let report = Junit.v ~suite ~timestamp:(P.timestamp (P.time ())) in
+    let report =
+      Junit.v ~suite ~file:t.file ~timestamp:(P.timestamp (P.time ()))
+    in
     let j = { path; report; running = None } in
     at_exit (fun () -> junit_write t j);
     j
@@ -787,7 +803,11 @@ module Make (P : Platform.MAKER) (M : Monad.S) = struct
       Config.apply_defaults ~default_log_dir:(default_log_dir ()) config
     in
     let t = empty ~config ~trap_logs:P.log_trap_supported ~suite_name:name in
-    let t = register_all t tl in
+    (* Read now: with a concurrency monad, the report is opened later, from a
+       call stack that no longer reaches the caller. Async calls [run] from its
+       scheduler, about 30 frames away from the caller. *)
+    let file = Option.map (fun (f, _, _) -> f) (caller_location ~depth:64) in
+    let t = register_all { t with file } tl in
     let stdout' = Formatters.get_stdout () in
     let stderr' = Formatters.get_stderr () in
     Formatters.set_stdout t.stdout;

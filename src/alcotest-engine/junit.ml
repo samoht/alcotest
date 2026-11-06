@@ -18,6 +18,7 @@ type case = {
 
 type t = {
   suite : string;
+  file : string option;
   timestamp : string;
   tests : int;
   failures : int;
@@ -27,9 +28,10 @@ type t = {
   cases : string list;
 }
 
-let v ~suite ~timestamp =
+let v ~suite ~file ~timestamp =
   {
     suite;
+    file;
     timestamp;
     tests = 0;
     failures = 0;
@@ -175,14 +177,15 @@ let add t case =
 let to_string t =
   let suite =
     elt "testsuite"
-      [
-        ("name", t.suite);
-        ("tests", string_of_int t.tests);
-        ("failures", string_of_int t.failures);
-        ("errors", string_of_int t.errors);
-        ("time", seconds t.time);
-        ("timestamp", t.timestamp);
-      ]
+      ([ ("name", t.suite) ]
+      @ Option.fold ~none:[] ~some:(fun f -> [ ("file", f) ]) t.file
+      @ [
+          ("tests", string_of_int t.tests);
+          ("failures", string_of_int t.failures);
+          ("errors", string_of_int t.errors);
+          ("time", seconds t.time);
+          ("timestamp", t.timestamp);
+        ])
       (List.rev t.cases)
   in
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

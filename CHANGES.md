@@ -3,6 +3,8 @@
 - Write a JUnit XML report of each run to `junit/<name>-<time>-<id>.xml` of the
   log directory, with the `file` and `line` of each test, or of its failure
   (#449, fixes #130, @samoht, report by @pbiggar)
+- Record the source file that calls `run`, and write it as the `file` of the
+  `<testsuite>` of the JUnit report (@samoht)
 - `Platform.S` now requires `timestamp` and `write_file` (#449, @samoht)
 - Under dune, keep the output of tests in `_build/_tests` of the workspace,
   where dune does not delete it, rather than in `_build/default`. With #472, each

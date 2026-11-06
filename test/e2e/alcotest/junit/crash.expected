@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites time="<time>"><testsuite name="crash" tests="2" failures="0" errors="1" time="<time>" timestamp="<date>"><testcase name="done" classname="crash.t" time="<time>" file="test/e2e/alcotest/junit/test_crash.ml" line="5"/>
+<testsuites time="<time>"><testsuite name="crash" file="test/e2e/alcotest/junit/test_crash.ml" tests="2" failures="0" errors="1" time="<time>" timestamp="<date>"><testcase name="done" classname="crash.t" time="<time>" file="test/e2e/alcotest/junit/test_crash.ml" line="5"/>
 <testcase name="stops" classname="crash.t" time="<time>" file="test/e2e/alcotest/junit/test_crash.ml" line="5"><error message="[crash] The process stopped while this test was running." type="crash">[crash] The process stopped while this test was running.</error>
 </testcase>
 </testsuite>

@@ -213,7 +213,8 @@ or CircleCI. The reports of all runs are in the same directory:
 dune workspace under `dune test`, or the one given by `-o`.
 
 Each test has the `file` and `line` where it is defined, or where it failed. A
-test written as a plain tuple has no location: use `test` or `test_case`.
+test written as a plain tuple has no location: use `test` or `test_case`. The
+`<testsuite>` has the `file` that calls `run`.
 
 As in other JUnit reports, a test that fails a `check` or calls `fail` is a
 `<failure>`, and a test that raises any other exception, such as `failwith` or

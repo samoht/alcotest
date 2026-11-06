@@ -21,7 +21,10 @@ type case = {
 
 type t
 
-val v : suite:string -> timestamp:string -> t
+val v : suite:string -> file:string option -> timestamp:string -> t
+(** [v ~suite ~file ~timestamp] is the report of the suite [suite], run from the
+    source file [file] and started at [timestamp], with no case. *)
+
 val add : t -> case -> t
 
 val to_string : t -> string
